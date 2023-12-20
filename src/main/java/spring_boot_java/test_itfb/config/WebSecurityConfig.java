@@ -12,30 +12,30 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class WebSecurityConfig {
 
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-			.authorizeRequests()
-				.anyRequest().fullyAuthenticated()
-				.and()
-			.formLogin();
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .anyRequest().fullyAuthenticated()
+                .and()
+                .formLogin();
 
-		return http.build();
-	}
+        return http.build();
+    }
 
-	@Autowired
-	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth
-			.ldapAuthentication()
-				.userDnPatterns("uid={0},ou=people")
-				.groupSearchBase("ou=groups")
-				.contextSource()
-					.url("ldap://localhost:8389/dc=springframework,dc=org")
-					.and()
-				.passwordCompare()
-					.passwordEncoder(new BCryptPasswordEncoder())
-					.passwordAttribute("userPassword");
-	}
+    @Autowired
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .ldapAuthentication()
+                .userDnPatterns("uid={0},ou=people")
+                .groupSearchBase("ou=groups")
+                .contextSource()
+                .url("ldap://localhost:8389/dc=springframework,dc=org")
+                .and()
+                .passwordCompare()
+                .passwordEncoder(new BCryptPasswordEncoder())
+                .passwordAttribute("userPassword");
+    }
 
 }
 

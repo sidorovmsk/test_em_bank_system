@@ -2,7 +2,6 @@ package spring_boot_java.test_itfb.models;
 
 import lombok.Data;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +20,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-//    @NotEmpty(message = "Имя не должно быть пустым")
+    //    @NotEmpty(message = "Имя не должно быть пустым")
 //    @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 100 символов длиной")
     @Column(unique = true, nullable = false, name = "login")
     private String login;

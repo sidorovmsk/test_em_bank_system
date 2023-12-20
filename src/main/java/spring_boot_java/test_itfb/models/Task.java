@@ -2,7 +2,6 @@ package spring_boot_java.test_itfb.models;
 
 
 import lombok.Data;
-
 import spring_boot_java.test_itfb.enums.TaskPriority;
 import spring_boot_java.test_itfb.enums.TaskStatus;
 

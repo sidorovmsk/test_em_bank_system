@@ -9,7 +9,8 @@
 <form th:method="POST" th:action="@{/people}" th:object="${person}">
     <label for="fullName">Enter fullName: </label>
     <input type="text" th:field="*{fullName}" id="fullName"/>
-    <div style="color: red" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">fullName error (it will be changed by
+    <div style="color: red" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">fullName error (it will be
+        changed by
         thymeleaf)
     </div>
     <br/>
