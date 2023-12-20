@@ -1,0 +1,52 @@
+spring:
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/test_effectivemobile_db
+    username: postgres
+    password: postgres
+
+  ldap:
+    embedded:
+      ldif: classpath:test-server.ldif
+      base-dn: dc=springframework,dc=org
+      port: 8389
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+  hibernate:
+    dialect: org.hibernate.dialect.PostgresPlusDialect
+    show_sql: 'true'
+    current_session_context_class: thread
+
+  liquibase:
+    enabled: true  # Включает использование Liquibase
+    change-log: classpath:db/changelog/changelog-master.yaml  # Указание пути к changelog файлу
+    default-schema: public  # Схема по умолчанию
+  #          drop-first: false  # Не удалять схему перед применением изменений (по желанию)
+  #          liquibase-hibernate-validator: false  # Отключить Hibernate Validator (по желанию)
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    cache: false
+    suffix: .html
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: prometheus
+logging:
+  level:
+    root: INFO
+    com.example: INFO
+    liquibase: DEBUG
+  pattern:
+    console: '%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n'
+    file: '%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n'
+  file:
+    name: logs/requests.log
+

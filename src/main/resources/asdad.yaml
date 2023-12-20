@@ -1,0 +1,165 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: al
+      changes:
+        - createTable:
+            tableName: person
+            columns:
+              - column:
+                  name: id
+                  type: INTEGER
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+  - changeSet:
+      id: 2
+      author: al
+      changes:
+        - createTable:
+            tableName: comments
+            columns:
+              - column:
+                  name: id
+                  type: INTEGER
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: text
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: person_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: task_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: createdAt
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+            foreignKeys:
+              - foreignKey:
+                  baseColumnNames:
+                    - person_id
+                  baseTableName: comments
+                  referencedColumnNames:
+                    - id
+                  referencedTableName: person
+              - foreignKey:
+                  baseColumnNames:
+                    - task_id
+                  baseTableName: comments
+                  referencedColumnNames:
+                    - id
+                  referencedTableName: tasks
+
+  - changeSet:
+      id: 3
+      author: al
+      changes:
+        - createTable:
+            tableName: tasks
+            columns:
+              - column:
+                  name: id
+                  type: INTEGER
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: priority
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: assignee_id
+                  type: INTEGER
+                  constraints:
+                    nullable: true
+            foreignKeys:
+              - foreignKey:
+                  baseColumnNames:
+                    - author_id
+                  baseTableName: tasks
+                  referencedColumnNames:
+                    - id
+                  referencedTableName: person
+              - foreignKey:
+                  baseColumnNames:
+                    - assignee_id
+                  baseTableName: tasks
+                  referencedColumnNames:
+                    - id
+                  referencedTableName: person
+  - changeSet:
+      id: 4
+      author: al
+      changes:
+        - insert:
+            tableName: person1
+            columns:
+              - id: 1
+              - email: "example1@example.com"
+              - password: "password1"
+        - insert:
+            tableName: person2
+            columns:
+              - id: 2
+              - email: "example2@example.com"
+              - password: "password2"
+
+        - insert:
+            tableName: tasks
+            columns:
+              - id: 1
+              - title: "Sample Task"
+              - description: "Task description"
+              - status: "IN_PROGRESS"
+              - priority: "HIGH"
+              - author_id: 1
+
+        - insert:
+            tableName: comments
+            columns:
+              - id: 1
+              - text: "This is a comment"
+              - person_id: 1
+              - task_id: 1
+              - createdAt: "2023-01-01 00:00:00"

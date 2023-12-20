@@ -1,0 +1,177 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: ваше_имя
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  type: INTEGER
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: login
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+
+  - changeSet:
+      id: 2
+      author: ваше_имя
+      changes:
+        - createTable:
+            tableName: tasks
+            columns:
+              - column:
+                  name: id
+                  type: INTEGER
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: priority
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: assignee_id
+                  type: INTEGER
+                  constraints:
+                    nullable: true
+
+  - changeSet:
+      id: 3
+      author: ваше_имя
+      changes:
+        - createTable:
+            tableName: comments
+            columns:
+              - column:
+                  name: id
+                  type: INTEGER
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: text
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: task_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 6
+      author: ваше_имя
+      changes:
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: login
+                  value: example1@email.com
+              - column:
+                  name: password
+                  value: hashed_password1
+  - changeSet:
+      id: 7
+      author: ваше_имя
+      changes:
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: login
+                  value: example2@email.com
+              - column:
+                  name: password
+                  value: hashed_password2
+  - changeSet:
+      id: 9
+      author: ваше_имя
+      changes:
+        - insert:
+            tableName: tasks
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: title
+                  value: "Example Task"
+              - column:
+                  name: description
+                  value: "Description of the task"
+              - column:
+                  name: status
+                  value: IN_PROGRESS
+              - column:
+                  name: priority
+                  value: HIGH
+              - column:
+                  name: author_id
+                  value: 1
+              - column:
+                  name: assignee_id
+                  value: 2
+
+  - changeSet:
+      id: 10
+      author: ваше_имя
+      changes:
+        - insert:
+            tableName: comments
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: text
+                  value: "Example Comment"
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: task_id
+                  value: 1

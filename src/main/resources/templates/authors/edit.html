@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование автора</title>
+</head>
+<body>
+<h1>Редактирование автора</h1>
+
+<form id="editAuthorForm">
+
+    <!-- Hidden input field to store the author ID -->
+    <input type="hidden" name="authorId" id="authorId" />
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" />
+
+    <button type="submit" id="saveButton">Сохранить</button>
+</form>
+
+<button id="cancelButton">Отменить</button>
+
+<script>
+    // JavaScript код для заполнения формы данными об авторе
+    const authorId = window.location.pathname.split("/").pop();
+    const csrfToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('XSRF-TOKEN='))
+        .split('=')[1];
+
+    fetch(`/authors/${authorId}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("authorId").value = data.id;
+            document.getElementById("name").value = data.name;
+        })
+        .catch(error => {
+            console.error("Error loading author data: " + error);
+        });
+
+    // Код для кнопки "Save"
+    document.getElementById("editAuthorForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        // Соберите данные из формы
+        const formData = new FormData(document.getElementById("editAuthorForm"));
+        const authorData = {};
+        formData.forEach((value, key) => {
+            authorData[key] = value;
+        });
+
+        // Отправьте данные на сервер для сохранения
+        fetch(`/authors/${authorData.authorId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "X-XSRF-TOKEN": csrfToken
+            },
+            body: JSON.stringify(authorData)
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    // Сохранение прошло успешно
+                    alert("Автор успешно отредактирован.");
+                    window.location.href = `/view/authors/${authorData.authorId}`;
+                } else {
+                    // Ошибка при сохранении
+                    alert("Произошла ошибка при редактировании автора.");
+                }
+            })
+            .catch(error => {
+                console.error("Error editing author: " + error);
+            });
+    });
+
+    // Код для кнопки "Cancel"
+    document.getElementById("cancelButton").addEventListener("click", function () {
+        window.location.href = `/view/authors/${authorId}`; // Возврат на страницу автора
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование книги</title>
+</head>
+<body>
+<h1>Редактирование книги</h1>
+
+<form id="editBookForm">
+    <input type="hidden" name="bookId" id="bookId"/>
+    <input type="hidden" name="bookTitle" id="bookTitle"/>
+
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title"/>
+
+    <!-- Add input fields for other book properties here -->
+
+    <h2>Автор:</h2>
+    <ul id="author-list">
+        <!-- You can populate the list of authors here -->
+    </ul>
+
+    <button type="submit" id="saveButton">Сохранить</button>
+</form>
+
+<button id="cancelButton">Отменить</button>
+
+<script>
+    // JavaScript код для заполнения списка авторов (подобно коду на странице просмотра книги)
+
+    // JavaScript код для заполнения формы данными о книге
+    const bookId = window.location.pathname.split("/").pop();
+    const csrfToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('XSRF-TOKEN='))
+        .split('=')[1];
+
+    fetch(`/books/${bookId}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("bookId").value = data.id;
+            document.getElementById("bookTitle").value = data.title;
+            document.getElementById("title").value = data.title; // Заполните соответствующее поле для заголовка
+
+            // Заполните остальные поля книги, если они есть
+
+            // Очистите и заполните список авторов, если есть
+            const authorList = document.getElementById("author-list");
+            authorList.innerHTML = "";
+
+            data.authors.forEach(author => {
+                const listItem = document.createElement("li");
+                listItem.textContent = `ID: ${author.id}, Name: ${author.name}`;
+                authorList.appendChild(listItem);
+            });
+        })
+        .catch(error => {
+            console.error("Error loading book data: " + error);
+        });
+
+    // Код для кнопки "Save"
+    document.getElementById("editBookForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        // Соберите данные из формы
+        const formData = new FormData(document.getElementById("editBookForm"));
+        const bookData = {};
+        formData.forEach((value, key) => {
+            bookData[key] = value;
+        });
+
+        // Отправьте данные на сервер для сохранения
+        fetch(`/books/${bookData.bookId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "X-XSRF-TOKEN": csrfToken
+            },
+            body: JSON.stringify(bookData)
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    // Сохранение прошло успешно
+                    alert("Книга успешно отредактирована.");
+                    window.location.href = `/view/books/${bookData.bookId}`;
+                } else {
+                    // Ошибка при сохранении
+                    alert("Произошла ошибка при редактировании книги.");
+                }
+            })
+            .catch(error => {
+                console.error("Error editing book: " + error);
+            });
+    });
+
+    // Код для кнопки "Cancel"
+    document.getElementById("cancelButton").addEventListener("click", function () {
+        window.location.href = `/view/books/${bookId}`; // Возврат на страницу книги
+    });
+</script>
+</body>
+</html>

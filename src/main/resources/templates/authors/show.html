@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Авторы</title>
+</head>
+<body>
+<h1>Информация об авторе</h1>
+<p id="error-message" style="color: red; display: none;">Автор с указанным идентификатором не найден.</p>
+<p><strong>ID:</strong> <span id="authorId"></span></p>
+<p><strong>Title:</strong> <span id="authorName"></span></p>
+
+<button id="editButton">Редактировать</button>
+<button id="deleteButton">Удалить</button>
+
+<script>
+
+    const authorId = window.location.pathname.split("/").pop();
+    const csrfToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('XSRF-TOKEN='))
+        .split('=')[1];
+
+    // JavaScript код для отображения данных и авторов
+    function displayAuthorData(author) {
+        document.getElementById("authorId").textContent = author.id;
+        document.getElementById("authorName").textContent = author.name;
+    }
+
+    // Отправить GET-запрос на сервер для получения данных о Book
+    fetch(`/authors/${authorId}`)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Автор с указанным идентификатором не найден.");
+            }
+        })
+        .then(data => {
+            displayAuthorData(data);
+        })
+        .catch(error => {
+            // Отображаем сообщение об ошибке и скрываем информацию о книге
+            document.getElementById("error-message").style.display = "block";
+            document.getElementById("authorId").style.display = "none";
+            document.getElementById("authorName").style.display = "none";
+
+            console.error("Error loading author data: " + error);
+        });
+
+    // Код для кнопки "Редактировать"
+    document.getElementById("editButton").addEventListener("click", function () {
+        // Перенаправить на страницу редактирования книги, например, /book_edit/1
+        window.location.href = `/view/authors/edit/${authorId}`;
+    });
+
+    document.getElementById("deleteButton").addEventListener("click", function () {
+        // Отправить DELETE-запрос на сервер для удаления книги
+        fetch(`/authors/${authorId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "X-XSRF-TOKEN": csrfToken
+            }
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    alert("Автор удален успешно.");
+                    window.location.href = "/view/authors";
+                } else {
+                    alert("Произошла ошибка при удалении автора.");
+                }
+            })
+            .catch(error => {
+                console.error("Error deleting author: " + error);
+            });
+    });
+</script>
+</body>
+</html>

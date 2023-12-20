@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Книги</title>
+</head>
+<body>
+<h1>Информация о книге</h1>
+
+<!-- Элемент для отображения сообщения об ошибке -->
+<p id="error-message" style="color: red; display: none;">Книга с указанным идентификатором не найдена.</p>
+
+<p><strong>ID:</strong> <span id="bookId"></span></p>
+<p><strong>Title:</strong> <span id="bookTitle"></span></p>
+<h1>Авторы:</h1>
+<ul id="author-list">
+</ul>
+
+<button id="editButton">Редактировать</button>
+<button id="deleteButton">Удалить</button>
+
+<script>
+    // Получить bookId из URL
+    const bookId = window.location.pathname.split("/").pop();
+    const csrfToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('XSRF-TOKEN='))
+        .split('=')[1];
+
+    // JavaScript код для отображения данных и авторов
+    function displayBookData(book) {
+        document.getElementById("bookId").textContent = book.id;
+        document.getElementById("bookTitle").textContent = book.title;
+    }
+
+    // Отправить GET-запрос на сервер для получения данных о Book
+    fetch(`/books/${bookId}`)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Книга с указанным идентификатором не найдена.");
+            }
+        })
+        .then(data => {
+            displayBookData(data);
+
+            // Очищаем список авторов перед добавлением новых
+            const authorList = document.getElementById("author-list");
+            authorList.innerHTML = "";
+
+            data.authors.forEach(author => {
+                const listItem = document.createElement("li");
+                listItem.textContent = `ID: ${author.id}, Name: ${author.name}`;
+                authorList.appendChild(listItem);
+            });
+        })
+        .catch(error => {
+            // Отображаем сообщение об ошибке и скрываем информацию о книге
+            document.getElementById("error-message").style.display = "block";
+            document.getElementById("bookId").style.display = "none";
+            document.getElementById("bookTitle").style.display = "none";
+            document.getElementById("author-list").style.display = "none";
+
+            console.error("Error loading book data: " + error);
+        });
+
+    // Код для кнопки "Удалить"
+    document.getElementById("deleteButton").addEventListener("click", function () {
+        // Отправить DELETE-запрос на сервер для удаления книги
+        fetch(`/books/${bookId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": csrfToken
+                }
+            }
+        )
+            .then(response => {
+                if (response.status === 200) {
+                    // Удаление прошло успешно
+                    alert("Книга удалена успешно.");
+                    window.location.href = "/view/books"; // Перенаправить на главную страницу книг
+                } else {
+                    // Возникла ошибка при удалении
+                    alert("Произошла ошибка при удалении книги.");
+                }
+            })
+            .catch(error => {
+                console.error("Error deleting book: " + error);
+            });
+    });
+
+    // Код для кнопки "Редактировать"
+    document.getElementById("editButton").addEventListener("click", function () {
+        // Перенаправить на страницу редактирования книги, например, /book_edit/1
+        window.location.href = `/view/books/edit/${bookId}`;
+    });
+</script>
+</body>
+</html>
