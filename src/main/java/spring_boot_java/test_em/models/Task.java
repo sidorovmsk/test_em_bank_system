@@ -1,9 +1,9 @@
-package spring_boot_java.test_itfb.models;
+package spring_boot_java.test_em.models;
 
 
 import lombok.Data;
-import spring_boot_java.test_itfb.enums.TaskPriority;
-import spring_boot_java.test_itfb.enums.TaskStatus;
+import spring_boot_java.test_em.enums.TaskPriority;
+import spring_boot_java.test_em.enums.TaskStatus;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

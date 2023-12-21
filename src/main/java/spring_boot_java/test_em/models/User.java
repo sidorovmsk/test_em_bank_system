@@ -1,4 +1,4 @@
-package spring_boot_java.test_itfb.models;
+package spring_boot_java.test_em.models;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package spring_boot_java.test_itfb.controllers;
+package spring_boot_java.test_em.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import spring_boot_java.test_itfb.models.Comment;
-import spring_boot_java.test_itfb.services.CommentService;
+import spring_boot_java.test_em.models.Comment;
+import spring_boot_java.test_em.services.CommentService;
 
 
 @Slf4j

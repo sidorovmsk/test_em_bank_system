@@ -1,4 +1,4 @@
-package spring_boot_java.test_itfb.dto;
+package spring_boot_java.test_em.dto;
 
 import lombok.Data;
 

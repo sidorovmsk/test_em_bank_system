@@ -1,9 +1,9 @@
-package spring_boot_java.test_itfb;
+package spring_boot_java.test_em;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
-import spring_boot_java.test_itfb.config.AppConfig;
+import spring_boot_java.test_em.config.AppConfig;
 
 @SpringBootApplication
 @Import(AppConfig.class)

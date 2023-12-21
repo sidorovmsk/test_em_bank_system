@@ -1,4 +1,4 @@
-package spring_boot_java.test_itfb.config;
+package spring_boot_java.test_em.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
