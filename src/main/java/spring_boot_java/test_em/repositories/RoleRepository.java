@@ -1,13 +1,13 @@
 package spring_boot_java.test_em.repositories;
 
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import spring_boot_java.test_em.models.User;
+import spring_boot_java.test_em.models.ERole;
+import spring_boot_java.test_em.models.Role;
 
 import java.util.Optional;
 
 @Repository
-public interface PeopleRepository extends JpaRepository<User, Integer> {
-    Optional<User> findByLogin(String login);
+public interface RoleRepository extends JpaRepository<Role, Long> {
+  Optional<Role> findByName(ERole name);
 }
