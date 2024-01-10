@@ -27,6 +27,23 @@ databaseChangeLog:
       author: al
       changes:
         - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: INTEGER
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(50)
+
+  - changeSet:
+      id: 3
+      author: al
+      changes:
+        - createTable:
             tableName: user_roles
             columns:
               - column:
@@ -42,7 +59,7 @@ databaseChangeLog:
                     foreignKeyName: FK_user_roles_role_id
                     references: role(id)
   - changeSet:
-      id: 3
+      id: 4
       author: al
       changes:
         - insert:
@@ -58,7 +75,7 @@ databaseChangeLog:
                   name: name
                   value: ROLE_USER
   - changeSet:
-      id: 4
+      id: 5
       author: al
       changes:
         - insert:
@@ -75,7 +92,7 @@ databaseChangeLog:
                   value: ROLE_ADMIN
 
   - changeSet:
-      id: 5
+      id: 6
       author: al
       changes:
         - insert:
@@ -92,7 +109,7 @@ databaseChangeLog:
                   value: ROLE_USER
 
   - changeSet:
-      id: 6
+      id: 7
       author: al
       changes:
         - insert:
@@ -118,7 +135,7 @@ databaseChangeLog:
                   value: password
 
   - changeSet:
-      id: 7
+      id: 8
       author: al
       changes:
         - insert:
