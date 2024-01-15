@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import spring_boot_java.test_em.models.ERole;
+import spring_boot_java.test_em.enums.ERole;
 import spring_boot_java.test_em.models.Role;
 import spring_boot_java.test_em.models.User;
 import spring_boot_java.test_em.payload.request.LoginRequest;

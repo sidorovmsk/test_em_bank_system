@@ -1,0 +1,7 @@
+package spring_boot_java.test_em.enums;
+
+public enum ERole {
+    ROLE_USER,
+    ROLE_MODERATOR,
+    ROLE_ADMIN
+}

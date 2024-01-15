@@ -18,4 +18,8 @@ public class CommentService {
     public Comment findById(int id) {
         return commentRepository.findById(id).orElse(null);
     }
+
+    public Comment createComment(Comment comment) {
+        return commentRepository.save(comment);
+    }
 }

@@ -2,7 +2,7 @@ package spring_boot_java.test_em.components;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import spring_boot_java.test_em.models.ERole;
+import spring_boot_java.test_em.enums.ERole;
 import spring_boot_java.test_em.models.Role;
 import spring_boot_java.test_em.repositories.RoleRepository;
 
@@ -16,6 +16,10 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        initRoles();
+    }
+
+    public void initRoles() {
         Role userRole = new Role();
         userRole.setName(ERole.ROLE_USER);
         Role adminRole = new Role();
@@ -27,5 +31,6 @@ public class DataLoader implements CommandLineRunner {
         roleRepository.save(adminRole);
         roleRepository.save(modRole);
     }
+
 }
 
