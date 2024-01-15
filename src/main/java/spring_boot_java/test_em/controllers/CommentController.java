@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import spring_boot_java.test_em.models.Comment;
 import spring_boot_java.test_em.services.CommentService;
 
+import java.util.List;
+
 
 @Slf4j
 @RestController
@@ -35,6 +37,13 @@ public class CommentController {
         log.info("comment controller findById");
         Comment comment = commentService.findById(id);
         return comment != null ? new ResponseEntity<>(comment, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/task/{id}")
+    public ResponseEntity<Comment> findByTaskId(@PathVariable("id") int id) {
+        log.info("comment controller findByTaskId");
+        List<Comment> comments = commentService.getAllByTaskId(id);
+        return comments != null ? new ResponseEntity(comments, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 

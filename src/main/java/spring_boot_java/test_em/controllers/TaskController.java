@@ -2,6 +2,9 @@ package spring_boot_java.test_em.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import spring_boot_java.test_em.models.Task;
 import spring_boot_java.test_em.services.TaskService;
@@ -58,14 +62,22 @@ public class TaskController {
     }
 
     @GetMapping("/author/{id}")
-    public List<Task> findAllTaskByAuthorId(@PathVariable("id") int id) {
+    public List<Task> findAllTaskByAuthorId(@PathVariable("id") int id,
+                                            @RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "10") int size,
+                                            @RequestParam(defaultValue = "id") String sort) {
         log.info("findAllByAuthorId");
-        return taskService.findAllByAuthorId(id);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+        return taskService.findAllByAuthorId(id, pageable);
     }
 
     @GetMapping("/assignee/{id}")
-    public List<Task> findAllTaskByAssigneeId(@PathVariable("id") int id) {
+    public List<Task> findAllTaskByAssigneeId(@PathVariable("id") int id,
+                                              @RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "10") int size,
+                                              @RequestParam(defaultValue = "id") String sort) {
         log.info("findAllByAssigneeId");
-        return taskService.findAllByAssigneeId(id);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+        return taskService.findAllByAssigneeId(id, pageable);
     }
 }

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import spring_boot_java.test_em.models.Comment;
 import spring_boot_java.test_em.repositories.CommentRepository;
 
+import java.util.List;
+
 @Service
 public class CommentService {
 
@@ -21,5 +23,9 @@ public class CommentService {
 
     public Comment createComment(Comment comment) {
         return commentRepository.save(comment);
+    }
+
+    public List<Comment> getAllByTaskId(int id) {
+        return commentRepository.getAllByTaskId(id);
     }
 }

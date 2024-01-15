@@ -2,6 +2,7 @@ package spring_boot_java.test_em.services;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import spring_boot_java.test_em.exceptions.ResourceNotFoundException;
@@ -53,11 +54,11 @@ public class TaskService {
         taskFromDB.setStatus(task.getStatus());
     }
 
-    public List<Task> findAllByAuthorId(int id) {
-        return taskRepository.findAllByAuthorId(id);
+    public List<Task> findAllByAuthorId(int id, Pageable pageable) {
+        return taskRepository.findAllByAuthorId(id, pageable);
     }
 
-    public List<Task> findAllByAssigneeId(int id) {
-        return taskRepository.findAllByAssigneeId(id);
+    public List<Task> findAllByAssigneeId(int id, Pageable pageable) {
+        return taskRepository.findAllByAssigneeId(id, pageable);
     }
 }
