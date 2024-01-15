@@ -8,6 +8,8 @@ import spring_boot_java.test_em.exceptions.ResourceNotFoundException;
 import spring_boot_java.test_em.models.Task;
 import spring_boot_java.test_em.repositories.TaskRepository;
 
+import java.util.List;
+
 @Service
 public class TaskService {
 
@@ -51,4 +53,11 @@ public class TaskService {
         taskFromDB.setStatus(task.getStatus());
     }
 
+    public List<Task> findAllByAuthorId(int id) {
+        return taskRepository.findAllByAuthorId(id);
+    }
+
+    public List<Task> findAllByAssigneeId(int id) {
+        return taskRepository.findAllByAssigneeId(id);
+    }
 }

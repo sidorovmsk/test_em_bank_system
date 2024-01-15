@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import spring_boot_java.test_em.models.Task;
 import spring_boot_java.test_em.services.TaskService;
 
+import java.util.List;
+
 @Slf4j
 @RestController()
 @RequestMapping("/task")
@@ -53,5 +55,17 @@ public class TaskController {
         log.info("editTask");
         Task editedTask = taskService.editTask(id, task);
         return new ResponseEntity<>(editedTask, HttpStatus.OK);
+    }
+
+    @GetMapping("/author/{id}")
+    public List<Task> findAllTaskByAuthorId(@PathVariable("id") int id) {
+        log.info("findAllByAuthorId");
+        return taskService.findAllByAuthorId(id);
+    }
+
+    @GetMapping("/assignee/{id}")
+    public List<Task> findAllTaskByAssigneeId(@PathVariable("id") int id) {
+        log.info("findAllByAssigneeId");
+        return taskService.findAllByAssigneeId(id);
     }
 }
