@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>spring_boot_java</groupId>
-    <artifactId>test_itfb</artifactId>
+    <artifactId>test_em</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>test_em</name>
     <description>Test task em with Spring Boot</description>
