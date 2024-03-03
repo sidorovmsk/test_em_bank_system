@@ -13,12 +13,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spring_boot_java.test_em.enums.ERole;
+import spring_boot_java.test_em.models.BankAccount;
+import spring_boot_java.test_em.models.Email;
+import spring_boot_java.test_em.models.PhoneNumber;
 import spring_boot_java.test_em.models.Role;
 import spring_boot_java.test_em.models.User;
 import spring_boot_java.test_em.payload.request.LoginRequest;
 import spring_boot_java.test_em.payload.request.SignupRequest;
 import spring_boot_java.test_em.payload.response.JwtResponse;
 import spring_boot_java.test_em.payload.response.MessageResponse;
+import spring_boot_java.test_em.repositories.BankAccountRepository;
+import spring_boot_java.test_em.repositories.EmailRepository;
+import spring_boot_java.test_em.repositories.PhoneNumberRepository;
 import spring_boot_java.test_em.repositories.RoleRepository;
 import spring_boot_java.test_em.repositories.UserRepository;
 import spring_boot_java.test_em.security.jwt.JwtUtils;
@@ -39,14 +45,23 @@ public class AuthController {
 
     private final RoleRepository roleRepository;
 
+    private final BankAccountRepository bankAccountRepository;
+
+    private final EmailRepository emailRepository;
+
+    private final PhoneNumberRepository phoneNumberRepository;
+
     private final PasswordEncoder encoder;
 
     private final JwtUtils jwtUtils;
 
-    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
+    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, BankAccountRepository bankAccountRepository, EmailRepository emailRepository, PhoneNumberRepository phoneNumberRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.bankAccountRepository = bankAccountRepository;
+        this.emailRepository = emailRepository;
+        this.phoneNumberRepository = phoneNumberRepository;
         this.encoder = encoder;
         this.jwtUtils = jwtUtils;
     }
@@ -68,7 +83,7 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
-                userDetails.getEmail(),
+//                userDetails.getEmail(),
                 roles));
     }
 
@@ -80,16 +95,15 @@ public class AuthController {
                     .body(new MessageResponse("Error: Username is already taken!"));
         }
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
-        }
+//        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+//            return ResponseEntity
+//                    .badRequest()
+//                    .body(new MessageResponse("Error: Email is already in use!"));
+//        }
 
         // Create new user's account
         User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                signUpRequest.getPhone(),
+                signUpRequest.getBirthDate(),
                 encoder.encode(signUpRequest.getPassword()));
 
         Set<String> strRoles = signUpRequest.getRole();
@@ -124,6 +138,22 @@ public class AuthController {
 
         user.setRoles(roles);
         userRepository.save(user);
+
+        BankAccount bankAccount = new BankAccount();
+        bankAccount.setUser(user);
+        bankAccount.setBalance(signUpRequest.getInitialAmount());
+        user.setBankAccount(bankAccount);
+        bankAccountRepository.save(bankAccount);
+
+        Email email = new Email();
+        PhoneNumber phoneNumber = new PhoneNumber();
+        email.setUser(user);
+        phoneNumber.setUser(user);
+        email.setEmail(signUpRequest.getEmail());
+        phoneNumber.setPhoneNumber(signUpRequest.getPhone());
+        emailRepository.save(email);
+        phoneNumberRepository.save(phoneNumber);
+
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

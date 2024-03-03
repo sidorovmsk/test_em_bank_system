@@ -86,6 +86,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(
                                         "/api/v1/auth/**",
+//                                        "/api/users/add/phone/**",
                                         "/v2/api-docs",
                                         "/3/api-docs",
                                         "/v3/api-docs/**",
