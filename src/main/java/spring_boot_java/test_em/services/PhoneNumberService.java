@@ -1,6 +1,7 @@
 package spring_boot_java.test_em.services;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import spring_boot_java.test_em.models.PhoneNumber;
 import spring_boot_java.test_em.models.User;
@@ -21,8 +22,8 @@ public class PhoneNumberService {
         this.userRepository = userRepository;
     }
 
-    public void addPhoneNumberByUserId(Long userId, String phoneNumber) {
-        User user = userRepository.findById(userId).orElse(null);
+    public void addPhoneNumberAuthenticatedUser(String phoneNumber) {
+        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
         if (user != null) {
             PhoneNumber phoneNumberInstance = new PhoneNumber();
             phoneNumberInstance.setPhoneNumber(phoneNumber);
@@ -31,8 +32,8 @@ public class PhoneNumberService {
         }
     }
 
-    public ResponseEntity<String> deletePhoneNumberByUserId(Long userId, String phone) {
-        User user = userRepository.findById(userId).orElse(null);
+    public ResponseEntity<String> deletePhoneNumberAuthenticatedUser(String phone) {
+        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
 
         if (user == null) {
             return ResponseEntity.notFound().build();

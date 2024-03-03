@@ -2,7 +2,6 @@ package spring_boot_java.test_em.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,15 +19,15 @@ public class PhoneNumberController {
         this.phoneNumberService = phoneNumberService;
     }
 
-    @PostMapping("/add/{userId}")
-    public void addPhoneNumberByUserId(@PathVariable Long userId, @RequestBody Map<String, String> requestBody) {
+    @PostMapping("/add")
+    public void addPhoneNumberByUserId(@RequestBody Map<String, String> requestBody) {
         String phoneNumber = requestBody.get("phoneNumber");
-        phoneNumberService.addPhoneNumberByUserId(userId, phoneNumber);
+        phoneNumberService.addPhoneNumberAuthenticatedUser(phoneNumber);
     }
 
-    @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<String> deletePhoneNumberByUserId(@PathVariable Long userId, @RequestBody Map<String, String> requestBody) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deletePhoneNumberByUserId(@RequestBody Map<String, String> requestBody) {
         String phone = requestBody.get("phoneNumber");
-        return phoneNumberService.deletePhoneNumberByUserId(userId, phone);
+        return phoneNumberService.deletePhoneNumberAuthenticatedUser(phone);
     }
 }

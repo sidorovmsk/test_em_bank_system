@@ -2,7 +2,6 @@ package spring_boot_java.test_em.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,15 +20,15 @@ public class EmailController {
         this.emailService = emailService;
     }
 
-    @PostMapping("/add/{userId}")
-    public void addEmailByUserId(@PathVariable Long userId, @RequestBody Map<String, String> requestBody) {
+    @PostMapping("/add")
+    public void addEmailByUserId(@RequestBody Map<String, String> requestBody) {
         String email = requestBody.get("email");
-        emailService.addEmailByUserId(userId, email);
+        emailService.addEmailAuthenticatedUser(email);
     }
 
-    @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<String> deleteEmailByUserId(@PathVariable Long userId, @RequestBody Map<String, String> requestBody) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteEmailByUserId(@RequestBody Map<String, String> requestBody) {
         String email = requestBody.get("email");
-        return emailService.deleteEmailByUserId(userId, email);
+        return emailService.deleteEmailAuthenticatedUser(email);
     }
 }

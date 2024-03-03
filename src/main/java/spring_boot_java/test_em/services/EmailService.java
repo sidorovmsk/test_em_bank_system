@@ -1,6 +1,7 @@
 package spring_boot_java.test_em.services;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import spring_boot_java.test_em.models.Email;
 import spring_boot_java.test_em.models.User;
@@ -21,8 +22,8 @@ public class EmailService {
         this.userRepository = userRepository;
     }
 
-    public void addEmailByUserId(Long userId, String email) {
-        User user = userRepository.findById(userId).orElse(null);
+    public void addEmailAuthenticatedUser(String email) {
+        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
         if (user != null) {
             Email emailInstance = new Email();
             emailInstance.setEmail(email);
@@ -32,8 +33,8 @@ public class EmailService {
     }
 
 
-    public ResponseEntity<String> deleteEmailByUserId(Long userId, String email) {
-        User user = userRepository.findById(userId).orElse(null);
+    public ResponseEntity<String> deleteEmailAuthenticatedUser(String email) {
+        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
 
         if (user == null) {
             // Обработка случая, когда пользователь не найден
