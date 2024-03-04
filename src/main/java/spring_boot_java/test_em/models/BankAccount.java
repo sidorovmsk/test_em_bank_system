@@ -24,6 +24,9 @@ public class BankAccount {
     @Column(nullable = false)
     private BigDecimal balance;
 
+    @Column(name = "initial_balance", nullable = false)
+    private BigDecimal initialBalance;
+
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;

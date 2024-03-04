@@ -142,6 +142,7 @@ public class AuthController {
         BankAccount bankAccount = new BankAccount();
         bankAccount.setUser(user);
         bankAccount.setBalance(signUpRequest.getInitialAmount());
+        bankAccount.setInitialBalance(signUpRequest.getInitialAmount());
         user.setBankAccount(bankAccount);
         bankAccountRepository.save(bankAccount);
 
