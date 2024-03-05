@@ -36,7 +36,7 @@ public class BalanceUpdateService {
         BigDecimal currentBalance = bankAccount.getBalance();
         BigDecimal initialDeposit = bankAccount.getInitialBalance();
 
-        BigDecimal increaseAmount = initialDeposit.multiply(BigDecimal.valueOf(0.05));
+        BigDecimal increaseAmount = currentBalance.multiply(BigDecimal.valueOf(0.05));
         BigDecimal newBalance = currentBalance.add(increaseAmount);
 
         BigDecimal maxAllowedBalance = initialDeposit.multiply(BigDecimal.valueOf(2.07));

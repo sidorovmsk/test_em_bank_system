@@ -12,12 +12,15 @@ import spring_boot_java.test_em.repositories.BankAccountRepository;
 import spring_boot_java.test_em.repositories.UserRepository;
 
 import java.math.BigDecimal;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 public class TransferService {
 
     private final BankAccountRepository bankAccountRepository;
     private final UserRepository userRepository;
+    private final Lock transferLock = new ReentrantLock();
 
     public TransferService(BankAccountRepository bankAccountRepository, UserRepository userRepository) {
         this.bankAccountRepository = bankAccountRepository;
@@ -26,23 +29,28 @@ public class TransferService {
 
     @Transactional
     public ResponseEntity<String> transferMoney(BigDecimal amount, Long recipientUserId) throws InsufficientFundsException {
-        User currentUser = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
+        transferLock.lock();
+        try {
+            User currentUser = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
 
-        BankAccount senderAccount = currentUser.getBankAccount();
+            BankAccount senderAccount = currentUser.getBankAccount();
 
-        if (senderAccount.getBalance().compareTo(amount) < 0) {
-            throw new InsufficientFundsException("Insufficient funds for the transfer");
+            if (senderAccount.getBalance().compareTo(amount) < 0) {
+                throw new InsufficientFundsException("Insufficient funds for the transfer");
+            }
+
+            BankAccount recipientAccount = (BankAccount) bankAccountRepository.findByUserId(recipientUserId)
+                    .orElseThrow(() -> new RecipientNotFoundException("Recipient not found"));
+
+            senderAccount.setBalance(senderAccount.getBalance().subtract(amount));
+            recipientAccount.setBalance(recipientAccount.getBalance().add(amount));
+
+            bankAccountRepository.save(senderAccount);
+            bankAccountRepository.save(recipientAccount);
+            return ResponseEntity.ok("Transfer completed successfully");
+        } finally {
+            transferLock.unlock();
         }
-
-        BankAccount recipientAccount = (BankAccount) bankAccountRepository.findByUserId(recipientUserId)
-                .orElseThrow(() -> new RecipientNotFoundException("Recipient not found"));
-
-        senderAccount.setBalance(senderAccount.getBalance().subtract(amount));
-        recipientAccount.setBalance(recipientAccount.getBalance().add(amount));
-
-        bankAccountRepository.save(senderAccount);
-        bankAccountRepository.save(recipientAccount);
-        return ResponseEntity.ok("Transfer completed successfully");
     }
 }
 
