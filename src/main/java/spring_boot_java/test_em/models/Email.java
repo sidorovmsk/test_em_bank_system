@@ -23,6 +23,7 @@ public class Email {
     private Long id;
 
     @NotNull
+    @jakarta.validation.constraints.Email
     private String email;
 
     @ManyToOne

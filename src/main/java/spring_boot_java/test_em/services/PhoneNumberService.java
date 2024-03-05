@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import spring_boot_java.test_em.models.PhoneNumber;
 import spring_boot_java.test_em.models.User;
+import spring_boot_java.test_em.payload.response.MessageResponse;
 import spring_boot_java.test_em.repositories.PhoneNumberRepository;
 import spring_boot_java.test_em.repositories.UserRepository;
 
@@ -22,17 +23,27 @@ public class PhoneNumberService {
         this.userRepository = userRepository;
     }
 
-    public void addPhoneNumberAuthenticatedUser(String phoneNumber) {
+    public ResponseEntity<?> addPhoneNumberAuthenticatedUser(String phoneNumber) {
+        if (phoneNumberRepository.existsByPhoneNumber(phoneNumber)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: PhoneNumber is already in use!"));
+        }
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
         if (user != null) {
             PhoneNumber phoneNumberInstance = new PhoneNumber();
             phoneNumberInstance.setPhoneNumber(phoneNumber);
             phoneNumberInstance.setUser(user);
             phoneNumberRepository.save(phoneNumberInstance);
+            return ResponseEntity.ok("PhoneNumber added");
+        } else {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: PhoneNumber was not added!"));
         }
     }
 
-    public ResponseEntity<String> deletePhoneNumberAuthenticatedUser(String phone) {
+    public ResponseEntity<?> deletePhoneNumberAuthenticatedUser(String phone) {
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
 
         if (user == null) {
@@ -54,6 +65,8 @@ public class PhoneNumberService {
         } else {
             return ResponseEntity.ok("User has only one phone number");
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity
+                .badRequest()
+                .body(new MessageResponse("Error: PhoneNumber was not deteted!"));
     }
 }

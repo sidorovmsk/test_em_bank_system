@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import spring_boot_java.test_em.models.Email;
 import spring_boot_java.test_em.models.User;
+import spring_boot_java.test_em.payload.response.MessageResponse;
 import spring_boot_java.test_em.repositories.EmailRepository;
 import spring_boot_java.test_em.repositories.UserRepository;
 
@@ -22,29 +23,36 @@ public class EmailService {
         this.userRepository = userRepository;
     }
 
-    public void addEmailAuthenticatedUser(String email) {
+    public ResponseEntity<?> addEmailAuthenticatedUser(String email) {
+        if (emailRepository.existsByEmail(email)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use!"));
+        }
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
         if (user != null) {
             Email emailInstance = new Email();
             emailInstance.setEmail(email);
             emailInstance.setUser(user);
             emailRepository.save(emailInstance);
+            return ResponseEntity.ok("Email added");
+        } else {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email was not added!"));
         }
     }
 
-
-    public ResponseEntity<String> deleteEmailAuthenticatedUser(String email) {
+    public ResponseEntity<?> deleteEmailAuthenticatedUser(String email) {
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
 
         if (user == null) {
-            // Обработка случая, когда пользователь не найден
             return ResponseEntity.notFound().build();
         }
 
         List<Email> emails = user.getEmails();
 
         if (emails.size() > 1) {
-            // Если у пользователя более одного email, удаляем email
             Iterator<Email> iterator = emails.iterator();
             while (iterator.hasNext()) {
                 Email emailInstance = iterator.next();
@@ -55,11 +63,10 @@ public class EmailService {
                 }
             }
         } else {
-            // Если у пользователя один email, возвращаем сообщение об ошибке
             return ResponseEntity.ok("User has only one email");
         }
-
-        // Возвращаем, если не удалось найти email
-        return ResponseEntity.notFound().build();
+        return ResponseEntity
+                .badRequest()
+                .body(new MessageResponse("Error: Email was not deleted!"));
     }
 }
