@@ -28,9 +28,12 @@ public class TransferService {
     }
 
     @Transactional
-    public ResponseEntity<String> transferMoney(BigDecimal amount, Long recipientUserId) throws InsufficientFundsException {
+    public ResponseEntity<String> transferMoney(BigDecimal amount, Long recipientUserId) {
         transferLock.lock();
         try {
+            if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+                return ResponseEntity.badRequest().body("Amount should be greater than 0");
+            }
             User currentUser = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
 
             BankAccount senderAccount = currentUser.getBankAccount();
