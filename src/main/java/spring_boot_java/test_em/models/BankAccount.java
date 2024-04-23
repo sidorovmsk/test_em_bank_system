@@ -8,12 +8,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Entity
-@Data
+@Getter
+@NoArgsConstructor
 @Table(name = "bank_accounts")
 public class BankAccount {
 
@@ -21,12 +24,15 @@ public class BankAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Column(nullable = false)
     private BigDecimal balance;
 
+    @Setter
     @Column(name = "initial_balance", nullable = false)
     private BigDecimal initialBalance;
 
+    @Setter
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;

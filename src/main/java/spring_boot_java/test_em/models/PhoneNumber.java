@@ -9,13 +9,16 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
-@Table(name = "phoneNumbers",
+@Getter
+@NoArgsConstructor
+@Table(name = "phone_numbers",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "phoneNumber")
+                @UniqueConstraint(columnNames = "phone_number")
         })
 public class PhoneNumber {
     @Id
@@ -23,9 +26,11 @@ public class PhoneNumber {
     private Long id;
 
     @NotNull
+    @Setter
     private String phoneNumber;
 
     @ManyToOne
+    @Setter
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }

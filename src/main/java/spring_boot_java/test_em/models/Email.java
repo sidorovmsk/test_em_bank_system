@@ -9,10 +9,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@NoArgsConstructor
 @Table(name = "emails",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "email")
@@ -23,10 +26,12 @@ public class Email {
     private Long id;
 
     @NotNull
+    @Setter
     @jakarta.validation.constraints.Email
     private String email;
 
     @ManyToOne
+    @Setter
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }

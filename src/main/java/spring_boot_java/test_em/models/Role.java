@@ -8,11 +8,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import spring_boot_java.test_em.enums.ERole;
 
 @Entity
-@Data
+@Getter
+@NoArgsConstructor
 @Table(name = "roles")
 public class Role {
     @Id
@@ -21,5 +24,6 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
+    @Setter
     private ERole name;
 }
