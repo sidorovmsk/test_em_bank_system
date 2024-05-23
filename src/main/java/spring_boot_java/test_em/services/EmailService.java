@@ -66,4 +66,17 @@ public class EmailService {
                 .badRequest()
                 .body(new MessageResponse("Error: Email was not deleted!"));
     }
+
+    public void validateEmail(String email) {
+        if (emailRepository.existsByEmail(email)) {
+            throw new RuntimeException("Error: Email is already in use!");
+        }
+    }
+
+    public void createEmailForUser(User user, String email_str) {
+        Email email = new Email();
+        email.setUser(user);
+        email.setEmail(email_str);
+        emailRepository.save(email);
+    }
 }

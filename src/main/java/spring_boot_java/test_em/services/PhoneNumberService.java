@@ -66,4 +66,17 @@ public class PhoneNumberService {
                 .badRequest()
                 .body(new MessageResponse("Error: PhoneNumber was not deteted!"));
     }
+
+    public void validatePhoneNumber(String phone) {
+        if (phoneNumberRepository.existsByPhoneNumber(phone)) {
+            throw new RuntimeException("Error: PhoneNumber is already in use!");
+        }
+    }
+
+    public void createPhoneNumberForUser(User user, String phone) {
+        PhoneNumber phoneNumber = new PhoneNumber();
+        phoneNumber.setUser(user);
+        phoneNumber.setPhoneNumber(phone);
+        phoneNumberRepository.save(phoneNumber);
+    }
 }

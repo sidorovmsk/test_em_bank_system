@@ -6,10 +6,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import spring_boot_java.test_em.models.Email;
 import spring_boot_java.test_em.models.PhoneNumber;
 import spring_boot_java.test_em.models.User;
+import spring_boot_java.test_em.payload.request.SignupRequest;
 import spring_boot_java.test_em.repositories.UserRepository;
 
 import java.time.LocalDate;
@@ -20,6 +22,11 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final EmailService emailService;
+    private final PhoneNumberService phoneNumberService;
+    private final BankAccountService bankAccountService;
+    private final PasswordEncoder encoder;
+    private final RoleService roleService;
 
     public List<User> searchUsers(LocalDate birthDate, String phone, String username, String email, Pageable pageable) {
         Specification<User> spec = Specification.where(null);
@@ -57,5 +64,33 @@ public class UserService {
         }
 
         return users;
+    }
+
+    public void registerUser(SignupRequest signUpRequest) {
+        validateSignUpRequest(signUpRequest);
+
+        User user = new User(signUpRequest.getUsername(),
+                signUpRequest.getBirthDate(),
+                encoder.encode(signUpRequest.getPassword()));
+
+        roleService.setRolesForUser(signUpRequest.getRole(), user);
+
+        userRepository.save(user);
+
+        bankAccountService.createBankAccountForUser(user, signUpRequest.getInitialAmount());
+        emailService.createEmailForUser(user, signUpRequest.getEmail());
+        phoneNumberService.createPhoneNumberForUser(user, signUpRequest.getPhone());
+    }
+
+    private void validateSignUpRequest(SignupRequest signUpRequest) {
+        validateUsername(signUpRequest.getUsername());
+        emailService.validateEmail(signUpRequest.getEmail());
+        phoneNumberService.validatePhoneNumber(signUpRequest.getPhone());
+    }
+
+    private void validateUsername(String username) {
+        if (userRepository.existsByUsername(username)) {
+            throw new RuntimeException("Error: Username is already taken!");
+        }
     }
 }
