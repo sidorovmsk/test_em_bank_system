@@ -1,5 +1,6 @@
 package spring_boot_java.test_em.services;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -13,15 +14,11 @@ import java.util.Iterator;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PhoneNumberService {
 
     private final PhoneNumberRepository phoneNumberRepository;
     private final UserRepository userRepository;
-
-    public PhoneNumberService(PhoneNumberRepository phoneNumberRepository, UserRepository userRepository) {
-        this.phoneNumberRepository = phoneNumberRepository;
-        this.userRepository = userRepository;
-    }
 
     public ResponseEntity<?> addPhoneNumberAuthenticatedUser(String phoneNumber) {
         if (phoneNumberRepository.existsByPhoneNumber(phoneNumber)) {

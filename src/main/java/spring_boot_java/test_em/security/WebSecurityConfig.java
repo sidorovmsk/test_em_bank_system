@@ -1,7 +1,7 @@
 package spring_boot_java.test_em.security;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,12 +23,11 @@ import spring_boot_java.test_em.security.services.UserDetailsServiceImpl;
         (securedEnabled = true,
                 jsr250Enabled = true,
                 prePostEnabled = true) // by default
+@RequiredArgsConstructor
 public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final AuthEntryPointJwt unauthorizedHandler;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -84,22 +83,22 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(
-                                        "/api/v1/auth/**",
+                                auth.requestMatchers(
+                                                "/api/v1/auth/**",
 //                                        "/api/users/add/phone/**",
-                                        "/v2/api-docs",
-                                        "/3/api-docs",
-                                        "/v3/api-docs/**",
-                                        "/swagger-resources",
-                                        "/swagger-resources/**",
-                                        "/configuration/ui",
-                                        "/configuration/security",
-                                        "/swagger-ui/**",
-                                        "/webjars/**",
-                                        "swagger-ui.html").permitAll()
-                                .requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/test/**").permitAll()
-                                .anyRequest().authenticated()
+                                                "/v2/api-docs",
+                                                "/3/api-docs",
+                                                "/v3/api-docs/**",
+                                                "/swagger-resources",
+                                                "/swagger-resources/**",
+                                                "/configuration/ui",
+                                                "/configuration/security",
+                                                "/swagger-ui/**",
+                                                "/webjars/**",
+                                                "swagger-ui.html").permitAll()
+                                        .requestMatchers("/api/auth/**").permitAll()
+                                        .requestMatchers("/api/test/**").permitAll()
+                                        .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());

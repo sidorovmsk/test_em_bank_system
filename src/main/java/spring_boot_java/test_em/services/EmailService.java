@@ -1,5 +1,6 @@
 package spring_boot_java.test_em.services;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -13,15 +14,11 @@ import java.util.Iterator;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class EmailService {
 
     private final EmailRepository emailRepository;
     private final UserRepository userRepository;
-
-    public EmailService(EmailRepository emailRepository, UserRepository userRepository) {
-        this.emailRepository = emailRepository;
-        this.userRepository = userRepository;
-    }
 
     public ResponseEntity<?> addEmailAuthenticatedUser(String email) {
         if (emailRepository.existsByEmail(email)) {
