@@ -1,5 +1,6 @@
 package spring_boot_java.test_em.controllers;
 
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,13 +15,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/transfer")
+@RequiredArgsConstructor
 public class TransferController {
 
     private final TransferService transferService;
-
-    public TransferController(TransferService transferService) {
-        this.transferService = transferService;
-    }
 
     @SneakyThrows
     @PostMapping("/{id}")

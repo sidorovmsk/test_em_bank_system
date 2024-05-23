@@ -1,6 +1,7 @@
 package spring_boot_java.test_em.controllers;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -14,12 +15,9 @@ import spring_boot_java.test_em.services.PhoneNumberService;
 
 @RestController
 @RequestMapping("/phone")
+@RequiredArgsConstructor
 public class PhoneNumberController {
     private final PhoneNumberService phoneNumberService;
-
-    public PhoneNumberController(PhoneNumberService phoneNumberService) {
-        this.phoneNumberService = phoneNumberService;
-    }
 
     @PostMapping("/add")
     public ResponseEntity<?> addPhoneNumberByUserId(@Valid @RequestBody PhoneNumber phoneNumber, BindingResult bindingResult) {

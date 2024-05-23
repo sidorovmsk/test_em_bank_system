@@ -1,6 +1,7 @@
 package spring_boot_java.test_em.controllers;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,6 +41,7 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
     private final AuthenticationManager authenticationManager;
 
@@ -56,17 +58,6 @@ public class AuthController {
     private final PasswordEncoder encoder;
 
     private final JwtUtils jwtUtils;
-
-    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, BankAccountRepository bankAccountRepository, EmailRepository emailRepository, PhoneNumberRepository phoneNumberRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
-        this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.bankAccountRepository = bankAccountRepository;
-        this.emailRepository = emailRepository;
-        this.phoneNumberRepository = phoneNumberRepository;
-        this.encoder = encoder;
-        this.jwtUtils = jwtUtils;
-    }
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {

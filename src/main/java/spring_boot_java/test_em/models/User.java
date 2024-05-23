@@ -71,7 +71,7 @@ public class User {
     private BankAccount bankAccount;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true) 
     private List<PhoneNumber> phones = new ArrayList<>();
 
     @JsonIgnore

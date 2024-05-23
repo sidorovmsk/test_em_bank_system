@@ -1,6 +1,7 @@
 package spring_boot_java.test_em.controllers;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -14,13 +15,10 @@ import spring_boot_java.test_em.services.EmailService;
 
 @RestController
 @RequestMapping("/emails")
+@RequiredArgsConstructor
 public class EmailController {
 
     private final EmailService emailService;
-
-    public EmailController(EmailService emailService) {
-        this.emailService = emailService;
-    }
 
     @PostMapping("/add")
     public ResponseEntity<?> addEmailByUserId(@Valid @RequestBody Email email, BindingResult bindingResult) {
