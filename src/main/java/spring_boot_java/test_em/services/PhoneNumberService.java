@@ -11,7 +11,7 @@ import spring_boot_java.test_em.repositories.PhoneNumberRepository;
 import spring_boot_java.test_em.repositories.UserRepository;
 
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +47,7 @@ public class PhoneNumberService {
             return ResponseEntity.notFound().build();
         }
 
-        List<PhoneNumber> phones = user.getPhones();
+        Set<PhoneNumber> phones = user.getPhones();
 
         if (phones.size() > 1) {
             Iterator<PhoneNumber> iterator = phones.iterator();

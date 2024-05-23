@@ -11,7 +11,7 @@ import spring_boot_java.test_em.repositories.EmailRepository;
 import spring_boot_java.test_em.repositories.UserRepository;
 
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +47,7 @@ public class EmailService {
             return ResponseEntity.notFound().build();
         }
 
-        List<Email> emails = user.getEmails();
+        Set<Email> emails = user.getEmails();
 
         if (emails.size() > 1) {
             Iterator<Email> iterator = emails.iterator();

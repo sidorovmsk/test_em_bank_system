@@ -26,9 +26,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -71,12 +69,12 @@ public class User {
     private BankAccount bankAccount;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true) 
-    private List<PhoneNumber> phones = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PhoneNumber> phones = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Email> emails = new ArrayList<>();
+    private Set<Email> emails = new HashSet<>();
 
     public User(String username, LocalDate birthDate, String password) {
         this.username = username;
